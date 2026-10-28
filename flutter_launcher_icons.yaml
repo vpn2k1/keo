@@ -1,0 +1,6 @@
+flutter_launcher_icons:
+  image_path: assets/icon/app_icon.png
+  android: true
+  ios: true
+  # shortcut: chỉ sinh icon dạng cũ; cần foreground nền trong suốt mới làm adaptive icon Android.
+  remove_alpha_ios: true
