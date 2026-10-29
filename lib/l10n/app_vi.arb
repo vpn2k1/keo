@@ -1,0 +1,73 @@
+{
+  "@@locale": "vi",
+  "appTitle": "KEO - Vượt Phòng Tuyến",
+  "gameName": "KEO",
+  "gameSubtitle": "VƯỢT PHÒNG TUYẾN",
+  "playNow": "Chơi ngay",
+  "levelSelect": "Chọn màn",
+  "howToPlay": "Cách chơi",
+  "settings": "Cài đặt",
+  "character": "Nhân vật",
+  "characterSelect": "Chọn nhân vật",
+  "back": "Quay lại",
+  "done": "Xong",
+  "start": "Bắt đầu",
+  "unlockedCount": "Đã mở khóa: {unlocked}/{total}",
+  "@unlockedCount": {
+    "placeholders": {
+      "unlocked": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "levelLabel": "Màn {level}",
+  "@levelLabel": {
+    "placeholders": { "level": { "type": "int" } }
+  },
+  "secondsShort": "{value}s",
+  "@secondsShort": {
+    "placeholders": { "value": { "type": "String" } }
+  },
+  "tutorialStep1": "Kéo joystick ở góc trái để chạy theo mọi hướng.",
+  "tutorialStep2": "Người canh chỉ chạy trái/phải trên vạch ngang của mình.",
+  "tutorialStep3": "Tới gần vạch là người canh bám theo để chặn đường bạn.",
+  "tutorialStep4": "Vượt qua vạch đích đỏ rồi quay về xuất phát mới thắng.",
+  "music": "Âm nhạc",
+  "musicHint": "Nhạc nền khi đang chơi",
+  "soundEffects": "Hiệu ứng âm thanh",
+  "soundEffectsHint": "Tiếng khi thắng hoặc bị bắt",
+  "vibration": "Rung",
+  "vibrationHint": "Rung khi thắng hoặc bị bắt",
+  "language": "Ngôn ngữ",
+  "vietnamese": "Tiếng Việt",
+  "controls": "Điều khiển",
+  "joystick": "Joystick",
+  "version": "Phiên bản",
+  "goalGo": "ĐI TỚI ĐÍCH · {crossed}/{total} vạch",
+  "@goalGo": {
+    "placeholders": {
+      "crossed": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "goalReturn": "QUAY VỀ XUẤT PHÁT!",
+  "pause": "Tạm dừng",
+  "winTitle": "Chiến thắng!",
+  "loseTitle": "Bị bắt rồi!",
+  "finishedAll": "Phá đảo {total} màn!",
+  "@finishedAll": {
+    "placeholders": { "total": { "type": "int" } }
+  },
+  "elapsedTime": "Thời gian: {value}s",
+  "@elapsedTime": {
+    "placeholders": { "value": { "type": "String" } }
+  },
+  "newBest": "Kỷ lục mới!",
+  "bestTime": "Kỷ lục: {value}s",
+  "@bestTime": {
+    "placeholders": { "value": { "type": "String" } }
+  },
+  "resume": "Tiếp tục",
+  "nextLevel": "Màn tiếp",
+  "replay": "Chơi lại",
+  "goHome": "Về trang chủ"
+}

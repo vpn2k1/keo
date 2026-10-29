@@ -1,86 +1,68 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 import '../app/keo_routes.dart';
-import '../game/round_rules.dart';
+import '../core/round_rules.dart';
+import '../l10n/app_localizations.dart';
+import '../state/keo_progress.dart';
 import '../ui/keo_ui.dart';
 
-class LevelScreen extends StatefulWidget {
+class LevelScreen extends ConsumerWidget {
   const LevelScreen({super.key});
 
   @override
-  State<LevelScreen> createState() => _LevelScreenState();
-}
-
-class _LevelScreenState extends State<LevelScreen> {
-  int unlocked = 1;
-  Map<int, double> best = {};
-
-  @override
-  void initState() {
-    super.initState();
-    _load();
-  }
-
-  Future<void> _load() async {
-    final p = await SharedPreferences.getInstance();
-    if (!mounted) return;
-    setState(() {
-      unlocked = p.getInt('unlocked') ?? 1;
-      best = {
-        for (var l = 1; l <= maxLevel; l++)
-          if (p.getDouble(bestTimeKey(l)) case final t?) l: t,
-      };
-    });
-  }
-
-  Future<void> _open(int level) async {
-    await pushGame(context, level);
-    await _load();
-  }
-
-  @override
-  Widget build(BuildContext context) => KeoPage(
-        heading: 'Chọn màn',
-        children: [
-          KeoPanel(
-            child: Text(
-              'Đã mở khóa: $unlocked/$maxLevel',
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 19,
-                fontWeight: FontWeight.w900,
-                color: KeoColors.ink,
-              ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final t = AppLocalizations.of(context);
+    final progress = ref.watch(progressProvider).value;
+    var unlocked = 1;
+    var best = const <int, double>{};
+    if (progress != null) {
+      unlocked = progress.unlocked;
+      best = progress.bestTimes;
+    }
+    return KeoPage(
+      heading: t.levelSelect,
+      children: [
+        KeoPanel(
+          child: Text(
+            t.unlockedCount(unlocked, maxLevel),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 19.sp,
+              fontWeight: FontWeight.w900,
+              color: KeoColors.ink,
             ),
           ),
-          const SizedBox(height: 16),
-          // Ô màn co theo bề ngang thật, không dùng kích thước cố định.
-          LayoutBuilder(
-            builder: (context, box) {
-              final width = (box.maxWidth - 24) / 3;
-              return Wrap(
-                spacing: 12,
-                runSpacing: 12,
-                alignment: WrapAlignment.center,
-                children: [
-                  for (var level = 1; level <= maxLevel; level++)
-                    SizedBox(
-                      width: width,
-                      height: width * .88,
-                      child: _LevelTile(
-                        level: level,
-                        locked: level > unlocked,
-                        best: best[level],
-                        onPressed: () => _open(level),
-                      ),
+        ),
+        SizedBox(height: 16.h),
+        // Ô màn co theo bề ngang thật, không dùng kích thước cố định.
+        LayoutBuilder(
+          builder: (context, box) {
+            final width = (box.maxWidth - 24.w) / 3;
+            return Wrap(
+              spacing: 12.w,
+              runSpacing: 12.w,
+              alignment: WrapAlignment.center,
+              children: [
+                for (var level = 1; level <= maxLevel; level++)
+                  SizedBox(
+                    width: width,
+                    height: width * .88,
+                    child: _LevelTile(
+                      level: level,
+                      locked: level > unlocked,
+                      best: best[level],
                     ),
-                ],
-              );
-            },
-          ),
-        ],
-      );
+                  ),
+              ],
+            );
+          },
+        ),
+      ],
+    );
+  }
 }
 
 class _LevelTile extends StatelessWidget {
@@ -88,19 +70,18 @@ class _LevelTile extends StatelessWidget {
     required this.level,
     required this.locked,
     required this.best,
-    required this.onPressed,
   });
 
   final int level;
   final bool locked;
   final double? best;
-  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
     var background = KeoColors.yellow;
     var icon = Icons.star_rounded;
-    VoidCallback? tap = onPressed;
+    VoidCallback? tap = () => context.push(KeoRoutes.game(level));
     if (locked) {
       background = KeoColors.locked;
       icon = Icons.lock;
@@ -116,22 +97,24 @@ class _LevelTile extends StatelessWidget {
         padding: EdgeInsets.zero,
         elevation: 3,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(18.r),
           side: const BorderSide(color: KeoColors.brown, width: 2),
         ),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 22),
+          Icon(icon, size: 22.sp),
           Text(
-            'Màn $level',
+            t.levelLabel(level),
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
+            style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w800),
           ),
-          if (best case final t?)
-            Text('${t.toStringAsFixed(1)}s',
-                style: const TextStyle(fontSize: 12)),
+          if (best case final time?)
+            Text(
+              t.secondsShort(time.toStringAsFixed(1)),
+              style: TextStyle(fontSize: 12.sp),
+            ),
         ],
       ),
     );

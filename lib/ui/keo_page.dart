@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../app/keo_routes.dart';
 
 import 'keo_background.dart';
 import 'stroke_text.dart';
@@ -28,21 +31,21 @@ class KeoPage extends StatelessWidget {
                 child: Row(
                   children: [
                     IconButton.filledTonal(
-                      onPressed: () => Navigator.maybePop(context),
+                      onPressed: () => keoPop(context),
                       icon: const Icon(Icons.arrow_back),
                       tooltip: 'Quay lại',
                     ),
-                    Expanded(child: StrokeText(heading, size: 28)),
+                    Expanded(child: StrokeText(heading, size: 28.sp)),
                     const SizedBox(width: 48),
                   ],
                 ),
               ),
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(16, 10, 16, 24),
+                  padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w, 24.h),
                   child: Center(
                     child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 380),
+                      constraints: BoxConstraints(maxWidth: 380.w),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,

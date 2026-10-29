@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'keo_theme.dart';
 
@@ -22,7 +23,7 @@ class KeoPanel extends StatelessWidget {
         padding: padding,
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.circular(radius),
+          borderRadius: BorderRadius.circular(radius.r),
           border: Border.all(color: KeoColors.brown, width: 2),
           boxShadow: const [
             BoxShadow(
@@ -32,7 +33,7 @@ class KeoPanel extends StatelessWidget {
         // Material trong suốt để ListTile/InkWell trong panel vẫn vẽ được hiệu ứng chạm.
         child: Material(
           color: Colors.transparent,
-          borderRadius: BorderRadius.circular(radius),
+          borderRadius: BorderRadius.circular(radius.r),
           clipBehavior: Clip.antiAlias,
           child: child,
         ),

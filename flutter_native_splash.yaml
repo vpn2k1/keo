@@ -1,0 +1,9 @@
+flutter_native_splash:
+  color: "#FFB51D"
+  background_image: assets/images/title.png
+  android: true
+  ios: true
+  # shortcut: Android 12+ chỉ cho icon tròn giữa màn, nên dùng lại icon ứng dụng.
+  android_12:
+    color: "#FFB51D"
+    image: assets/icon/app_icon.png

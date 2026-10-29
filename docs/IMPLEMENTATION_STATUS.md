@@ -16,7 +16,7 @@
 - [x] `flutter analyze` and `flutter test` pass (Flutter 3.44.8)
 
 ## Not yet verified / not implemented
-- [ ] Music and sound effects (no audio assets yet; switches are shown disabled as "Sắp có")
+- [ ] File âm thanh thật (hiện là file tạm tự tổng hợp trong `assets/audio/`)
 - [x] Two-frame running and guard patrol animation; directional front/back player poses
 - [ ] Tile maps and expanded animation states
 - [ ] Hand-tuned difficulty per level (current curve needs playtesting)

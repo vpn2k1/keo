@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../game/keo_game.dart';
+import '../../core/round_rules.dart';
+import '../../l10n/app_localizations.dart';
 import '../../ui/keo_ui.dart';
 
 /// Lớp phủ khi tạm dừng hoặc kết thúc màn: một tấm panel giữa màn hình,
@@ -34,11 +36,11 @@ class RoundOverlay extends StatelessWidget {
   bool get _paused => state == RoundState.paused;
   bool get _won => state == RoundState.won;
 
-  String get _title {
-    if (_paused) return 'Tạm dừng';
-    if (finishedAll) return 'Phá đảo 10 màn!';
-    if (_won) return 'Chiến thắng!';
-    return 'Bị bắt rồi!';
+  String _title(AppLocalizations t) {
+    if (_paused) return t.pause;
+    if (finishedAll) return t.finishedAll(maxLevel);
+    if (_won) return t.winTitle;
+    return t.loseTitle;
   }
 
   ({IconData icon, Color color}) get _badge {
@@ -48,84 +50,84 @@ class RoundOverlay extends StatelessWidget {
     }
     return (
       icon: Icons.sentiment_very_dissatisfied_rounded,
-      color: Color(0xFFE88A7A)
+      color: const Color(0xFFE88A7A),
     );
   }
 
-  String get _bestLine {
-    if (newBest) return 'Kỷ lục mới!';
-    return 'Kỷ lục: ${best!.toStringAsFixed(1)}s';
+  String _bestLine(AppLocalizations t) {
+    if (newBest) return t.newBest;
+    return t.bestTime(best!.toStringAsFixed(1));
   }
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
     final badge = _badge;
     return ColoredBox(
       color: KeoColors.scrim,
       child: Center(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
+          padding: EdgeInsets.all(24.w),
           child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 340),
+            constraints: BoxConstraints(maxWidth: 340.w),
             child: KeoPanel(
-              padding: const EdgeInsets.fromLTRB(20, 22, 20, 20),
+              padding: EdgeInsets.fromLTRB(20.w, 22.h, 20.w, 20.h),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   CircleAvatar(
-                    radius: 34,
+                    radius: 34.r,
                     backgroundColor: badge.color,
-                    child: Icon(badge.icon, size: 40, color: KeoColors.ink),
+                    child: Icon(badge.icon, size: 40.sp, color: KeoColors.ink),
                   ),
-                  const SizedBox(height: 14),
+                  SizedBox(height: 14.h),
                   Text(
-                    _title,
+                    _title(t),
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 26,
+                    style: TextStyle(
+                      fontSize: 26.sp,
                       fontWeight: FontWeight.w900,
                       color: KeoColors.ink,
                     ),
                   ),
                   if (!_paused) ...[
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6.h),
                     Text(
-                      'Thời gian: ${elapsed.toStringAsFixed(1)}s',
-                      style:
-                          const TextStyle(fontSize: 17, color: KeoColors.ink),
+                      t.elapsedTime(elapsed.toStringAsFixed(1)),
+                      style: TextStyle(fontSize: 17.sp, color: KeoColors.ink),
                     ),
                     if (_won && best != null)
                       Text(
-                        _bestLine,
-                        style: const TextStyle(
-                          fontSize: 17,
+                        _bestLine(t),
+                        style: TextStyle(
+                          fontSize: 17.sp,
                           fontWeight: FontWeight.w900,
                           color: KeoColors.brown,
                         ),
                       ),
                   ],
-                  const SizedBox(height: 18),
+                  SizedBox(height: 18.h),
                   if (_paused) ...[
-                    KeoButton(title: 'Tiếp tục', onPressed: onResume),
-                    const SizedBox(height: 10),
+                    KeoButton(title: t.resume, onPressed: onResume),
+                    SizedBox(height: 10.h),
                   ],
                   if (_won && hasNextLevel) ...[
                     KeoButton(
-                      title: 'Màn tiếp',
+                      title: t.nextLevel,
                       icon: Icons.arrow_forward_rounded,
                       onPressed: onNext,
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10.h),
                   ],
                   KeoButton(
-                    title: 'Chơi lại',
+                    title: t.replay,
                     color: KeoColors.blue,
                     icon: Icons.refresh,
                     onPressed: onRestart,
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10.h),
                   KeoButton(
-                    title: 'Về trang chủ',
+                    title: t.goHome,
                     color: Colors.white,
                     icon: Icons.home,
                     onPressed: onHome,

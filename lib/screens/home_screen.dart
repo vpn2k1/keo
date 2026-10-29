@@ -1,77 +1,87 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 import '../app/keo_routes.dart';
+import '../l10n/app_localizations.dart';
 import '../ui/keo_ui.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        body: KeoBackground(
-          child: Column(
-            children: [
-              const SizedBox(height: 10),
-              const StrokeText('KEO', size: 62),
-              const SizedBox(height: 8),
-              const KeoPanel(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                child: Text(
-                  'VƯỢT PHÒNG TUYẾN',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w900,
-                    color: KeoColors.ink,
-                    letterSpacing: 1.1,
+  Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+    return Scaffold(
+      body: KeoBackground(
+        child: Column(
+          children: [
+            SizedBox(height: 10.h),
+            StrokeText(t.gameName, size: 62.sp),
+            SizedBox(height: 8.h),
+            KeoPanel(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 6.h),
+              child: Text(
+                t.gameSubtitle,
+                style: TextStyle(
+                  fontSize: 15.sp,
+                  fontWeight: FontWeight.w900,
+                  color: KeoColors.ink,
+                  letterSpacing: 1.1,
+                ),
+              ),
+            ),
+            // Spacer thay cho toạ độ cố định: nút luôn nằm trên bãi cỏ dù màn hình cao hay thấp.
+            const Spacer(),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.w),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: 340.w),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      KeoButton(
+                        title: t.playNow,
+                        onPressed: () => context.push(KeoRoutes.game(1)),
+                      ),
+                      SizedBox(height: 12.h),
+                      KeoButton(
+                        title: t.levelSelect,
+                        color: KeoColors.blue,
+                        icon: Icons.map,
+                        onPressed: () => context.push(KeoRoutes.levels),
+                      ),
+                      SizedBox(height: 12.h),
+                      KeoButton(
+                        title: t.character,
+                        color: KeoColors.blue,
+                        icon: Icons.person,
+                        onPressed: () => context.push(KeoRoutes.character),
+                      ),
+                      SizedBox(height: 12.h),
+                      KeoButton(
+                        title: t.howToPlay,
+                        color: KeoColors.beige,
+                        icon: Icons.help,
+                        onPressed: () => context.push(KeoRoutes.tutorial),
+                      ),
+                      SizedBox(height: 12.h),
+                      KeoButton(
+                        title: t.settings,
+                        color: KeoColors.beige,
+                        icon: Icons.settings,
+                        onPressed: () => context.push(KeoRoutes.settings),
+                      ),
+                    ],
                   ),
                 ),
               ),
-              // Spacer thay cho Alignment cố định: nút luôn nằm trên bãi cỏ dù màn hình cao hay thấp.
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 340),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        KeoButton(
-                          title: 'Chơi ngay',
-                          onPressed: () => pushGame(context, 1),
-                        ),
-                        const SizedBox(height: 12),
-                        KeoButton(
-                          title: 'Chọn màn',
-                          color: KeoColors.blue,
-                          icon: Icons.map,
-                          onPressed: () =>
-                              Navigator.pushNamed(context, KeoRoutes.levels),
-                        ),
-                        const SizedBox(height: 12),
-                        KeoButton(
-                          title: 'Cách chơi',
-                          color: KeoColors.beige,
-                          icon: Icons.help,
-                          onPressed: () =>
-                              Navigator.pushNamed(context, KeoRoutes.tutorial),
-                        ),
-                        const SizedBox(height: 12),
-                        KeoButton(
-                          title: 'Cài đặt',
-                          color: KeoColors.beige,
-                          icon: Icons.settings,
-                          onPressed: () =>
-                              Navigator.pushNamed(context, KeoRoutes.settings),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 26),
-            ],
-          ),
+            ),
+            SizedBox(height: 26.h),
+          ],
         ),
-      );
+      ),
+    );
+  }
 }

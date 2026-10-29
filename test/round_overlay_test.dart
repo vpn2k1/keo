@@ -1,23 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:keo_mobile/game/keo_game.dart';
+import 'package:keo_mobile/core/round_rules.dart';
+import 'package:keo_mobile/l10n/app_localizations.dart';
 import 'package:keo_mobile/screens/widgets/round_overlay.dart';
 
-Widget _overlay(RoundState state,
-        {bool hasNextLevel = true, bool newBest = false, double? best}) =>
-    MaterialApp(
-      home: Scaffold(
-        body: RoundOverlay(
-          state: state,
-          elapsed: 9.87,
-          best: best,
-          newBest: newBest,
-          finishedAll: false,
-          hasNextLevel: hasNextLevel,
-          onResume: () {},
-          onNext: () {},
-          onRestart: () {},
-          onHome: () {},
+Widget _overlay(
+  RoundState state, {
+  bool hasNextLevel = true,
+  bool newBest = false,
+  double? best,
+}) =>
+    ScreenUtilInit(
+      designSize: const Size(390, 844),
+      builder: (context, _) => MaterialApp(
+        locale: const Locale('vi'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: RoundOverlay(
+            state: state,
+            elapsed: 9.87,
+            best: best,
+            newBest: newBest,
+            finishedAll: false,
+            hasNextLevel: hasNextLevel,
+            onResume: () {},
+            onNext: () {},
+            onRestart: () {},
+            onHome: () {},
+          ),
         ),
       ),
     );
@@ -25,6 +37,7 @@ Widget _overlay(RoundState state,
 void main() {
   testWidgets('pause shows resume and hides the round result', (tester) async {
     await tester.pumpWidget(_overlay(RoundState.paused));
+    await tester.pumpAndSettle();
     expect(find.text('Tạm dừng'), findsOneWidget);
     expect(find.text('Tiếp tục'), findsOneWidget);
     expect(find.textContaining('Thời gian'), findsNothing);

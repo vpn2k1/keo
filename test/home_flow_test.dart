@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:keo_mobile/app/keo_app.dart';
-import 'package:keo_mobile/app/keo_routes.dart';
-import 'package:keo_mobile/game/round_rules.dart';
+import 'package:keo_mobile/core/round_rules.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
@@ -13,7 +13,7 @@ void main() {
       'unlocked': 3,
       bestTimeKey(1): 12.34,
     });
-    await tester.pumpWidget(const KeoApp(initialRoute: KeoRoutes.home));
+    await tester.pumpWidget(const ProviderScope(child: KeoApp()));
     await tester.pumpAndSettle();
     expect(find.text('Chơi ngay'), findsOneWidget);
     await tester.tap(find.text('Chọn màn'));
@@ -27,7 +27,7 @@ void main() {
     tester,
   ) async {
     SharedPreferences.setMockInitialValues({});
-    await tester.pumpWidget(const KeoApp(initialRoute: KeoRoutes.home));
+    await tester.pumpWidget(const ProviderScope(child: KeoApp()));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Cài đặt'));
     await tester.pumpAndSettle();

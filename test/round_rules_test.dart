@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:keo_mobile/game/level_config.dart';
-import 'package:keo_mobile/game/round_rules.dart';
+import 'package:keo_mobile/core/level_config.dart';
+import 'package:keo_mobile/core/round_rules.dart';
 
 void main() {
   test('only return to start after reaching finish', () {
@@ -27,6 +27,65 @@ void main() {
       }
     }
   });
+  test('guard patrols while the player is far from its line', () {
+    final far = guardStep(
+      x: 100,
+      dir: 1,
+      distance: 10,
+      playerX: 300,
+      playerY: 560,
+      lineY: 140,
+    );
+    expect(far, patrol(100, 1, 10));
+  });
+  test('guard closes in on the player x when the player comes near', () {
+    final near = guardStep(
+      x: 100,
+      dir: -1,
+      distance: 10,
+      playerX: 300,
+      playerY: 200,
+      lineY: 140,
+    );
+    expect(near.x, 100 + 10 * guardChaseBoost);
+    expect(near.dir, 1.0);
+  });
+  test('guard blocks the player instead of overshooting or jittering', () {
+    final onTarget = guardStep(
+      x: 200,
+      dir: 1,
+      distance: 50,
+      playerX: 204,
+      playerY: 150,
+      lineY: 140,
+    );
+    expect(onTarget.x, 204);
+    final blocking = guardStep(
+      x: 204,
+      dir: 1,
+      distance: 50,
+      playerX: 204.5,
+      playerY: 150,
+      lineY: 140,
+    );
+    expect(blocking.x, 204);
+  });
+  test('chasing guard stays inside the arena', () {
+    for (final playerX in [0.0, 400.0]) {
+      var g = (x: 180.0, dir: 1.0);
+      for (var t = 0.0; t < 5; t += 1 / 60) {
+        g = guardStep(
+          x: g.x,
+          dir: g.dir,
+          distance: 123 / 60,
+          playerX: playerX,
+          playerY: 150,
+          lineY: 140,
+        );
+        expect(g.x, inInclusiveRange(arenaMinX, arenaMaxX));
+      }
+    }
+  });
   test('lines crossed counts lines below the player', () {
     const lines = [145.0, 230.0, 315.0, 400.0, 485.0];
     expect(linesCrossed(lines, 563), 0);
@@ -42,6 +101,14 @@ void main() {
     expect(isNewBest(null, 12), true);
     expect(isNewBest(10, 9.5), true);
     expect(isNewBest(10, 10), false);
+  });
+  test('bảng màn giữ đúng bố trí cũ sau khi tách dữ liệu', () {
+    expect(levelTable, hasLength(maxLevel));
+    expect(LevelConfig.forLevel(1).startX, [72, 152, 232]);
+    expect(LevelConfig.forLevel(3).lanes, [0, 1, 3, 4]);
+    expect(LevelConfig.forLevel(6).startX, [72, 112, 152, 192, 232]);
+    expect(LevelConfig.forLevel(7).startX, [300, 80, 260, 120, 220]);
+    expect(LevelConfig.forLevel(10).speed, 123);
   });
   test('every level has a valid config and difficulty grows', () {
     final configs = [

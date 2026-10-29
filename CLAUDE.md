@@ -22,15 +22,19 @@ Dự án đi trước khi có `rules/`, nên khác mẫu trong `rules/structure.
 | --- | --- |
 | `lib/features/<tên>/` | `lib/screens/` (màn hình) + `lib/screens/widgets/` |
 | widget dùng chung | `lib/ui/` (gom lại qua `lib/ui/keo_ui.dart`) |
-| `lib/core/` (Dart thuần) | `lib/game/round_rules.dart`, `lib/game/level_config.dart` |
-| `lib/l10n/strings.dart` | chưa có — câu chữ còn viết trực tiếp trong widget |
+| `lib/core/` (Dart thuần) | `lib/core/` (luật ván, bảng màn, nhân vật) |
+| — | `lib/game/keo_game.dart` (vòng lặp Flame) |
+| `lib/l10n/strings.dart` | `lib/l10n/app_vi.arb` + `flutter gen-l10n` |
+| `features/<tên>/state/` | `lib/state/` (provider Riverpod dùng chung) |
 
-Điều hướng: chỉ dùng named route trong `lib/app/keo_routes.dart`, không gọi
-`MaterialPageRoute` trong màn hình. Màn chơi nhận số màn qua `arguments`.
+Điều hướng: `go_router` khai báo trong `lib/app/keo_routes.dart`; màn hình chỉ gọi
+`context.push(KeoRoutes.xxx)`. Màn chơi là `/game/:level`.
+Câu chữ: thêm vào `lib/l10n/app_vi.arb` rồi `flutter gen-l10n`, dùng `AppLocalizations.of(context)`.
+Kích thước: dùng `.w/.h/.sp/.r` của `flutter_screenutil` (mẫu 390x844).
 
-Áp rule cho code mới; không refactor code cũ khi người dùng chưa yêu cầu.
-Chưa bật `test/rules/` của base: `lib/game/` còn 6 chỗ dùng toán tử 3 ngôi và
-dự án không có `lib/core/` (test architecture sẽ lỗi).
+`test/rules/` của base đã bật: toán tử 3 ngôi, số dòng, tên file, `lib/core/`
+không import Flutter. Chạy `dart format lib test` trước khi test.
+Độ khó từng màn nằm trong bảng `levelTable` ở `lib/core/level_config.dart`.
 
 ## Skill và agent
 

@@ -28,7 +28,9 @@ Quy ước: `[ ]` chưa làm; `[x]` đã làm và xác minh; `[!]` blocked hoặ
 - [x] HUD thông báo tiến về đích (kèm số vạch đã vượt) hoặc quay về.
 - [x] Tự pause khi app chạy nền; nút Back Android khi đang chơi sẽ tạm dừng.
 - [x] Bố cục dựng lại trên bộ art `assets/images/` (title/menu/field): SafeArea, Spacer và LayoutBuilder thay cho toạ độ cố định; chưa xem trực tiếp trên thiết bị.
-- [x] Điều hướng gom về named route trong `lib/app/keo_routes.dart`.
+- [x] Điều hướng gom về `go_router` trong `lib/app/keo_routes.dart`.
+- [x] Thư viện theo `docs/tech-stack.md`: riverpod, go_router, screenutil, l10n (ARB), audioplayers, package_info_plus, native splash.
+- [ ] Thay 4 file âm thanh tạm trong `assets/audio/` bằng nhạc và hiệu ứng thật.
 - [ ] Hướng dẫn người mới trong game (hiện chỉ có màn Cách chơi).
 
 ## Phase 3 — Levels & save
@@ -54,6 +56,6 @@ Quy ước: `[ ]` chưa làm; `[x]` đã làm và xác minh; `[!]` blocked hoặ
 
 ## Thông tin tiến độ
 
-- Updated: 2026-10-28.
+- Updated: 2026-10-29.
 - Blockers: chưa có âm thanh (không có file audio).
 - Next action: chơi thử trên thiết bị (chưa có simulator/máy nào kết nối), chỉnh độ khó theo playtest.

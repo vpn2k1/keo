@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'keo_theme.dart';
 
@@ -19,7 +20,7 @@ class KeoButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => SizedBox(
-        height: 56,
+        height: 56.h,
         width: double.infinity,
         child: ElevatedButton.icon(
           onPressed: onPressed,
@@ -28,14 +29,14 @@ class KeoButton extends StatelessWidget {
             foregroundColor: KeoColors.ink,
             elevation: 5,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(30.r),
               side: const BorderSide(color: KeoColors.brown, width: 2),
             ),
           ),
-          icon: Icon(icon, size: 26),
+          icon: Icon(icon, size: 26.sp),
           label: Text(
             title,
-            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w900),
+            style: TextStyle(fontSize: 19.sp, fontWeight: FontWeight.w900),
           ),
         ),
       );

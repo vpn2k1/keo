@@ -1,80 +1,62 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../app/keo_routes.dart';
+import '../l10n/app_localizations.dart';
+import '../state/app_info.dart';
+import '../state/keo_settings.dart';
 import '../ui/keo_ui.dart';
 
-class SettingsScreen extends StatefulWidget {
+class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
   @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
-}
-
-class _SettingsScreenState extends State<SettingsScreen> {
-  bool vibration = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _load();
-  }
-
-  Future<void> _load() async {
-    final p = await SharedPreferences.getInstance();
-    if (mounted) setState(() => vibration = p.getBool('vibration') ?? true);
-  }
-
-  // Lưu ngay mỗi lần gạt để thoát bằng nút back không mất thay đổi.
-  Future<void> _setVibration(bool v) async {
-    setState(() => vibration = v);
-    final p = await SharedPreferences.getInstance();
-    await p.setBool('vibration', v);
-  }
-
-  @override
-  Widget build(BuildContext context) => KeoPage(
-        heading: 'Cài đặt',
-        children: [
-          KeoPanel(
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            child: Column(
-              children: [
-                // shortcut: chưa có file âm thanh nên hai công tắc này tắt cứng; bật khi thêm asset audio.
-                const SwitchListTile(
-                  title: Text('Âm nhạc'),
-                  subtitle: Text('Sắp có'),
-                  value: false,
-                  onChanged: null,
-                ),
-                const SwitchListTile(
-                  title: Text('Hiệu ứng âm thanh'),
-                  subtitle: Text('Sắp có'),
-                  value: false,
-                  onChanged: null,
-                ),
-                SwitchListTile(
-                  title: const Text('Rung'),
-                  subtitle: const Text('Rung khi thắng hoặc bị bắt'),
-                  value: vibration,
-                  onChanged: _setVibration,
-                ),
-                const ListTile(
-                  title: Text('Ngôn ngữ'),
-                  trailing: Text('Tiếng Việt'),
-                ),
-                const ListTile(
-                  title: Text('Điều khiển'),
-                  trailing: Text('Joystick'),
-                ),
-              ],
-            ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final t = AppLocalizations.of(context);
+    final settings = ref.watch(settingsProvider).value;
+    final notifier = ref.read(settingsProvider.notifier);
+    return KeoPage(
+      heading: t.settings,
+      children: [
+        KeoPanel(
+          padding: EdgeInsets.symmetric(vertical: 4.h),
+          child: Column(
+            children: [
+              SwitchListTile(
+                title: Text(t.music),
+                subtitle: Text(t.musicHint),
+                value: settings?.music ?? true,
+                onChanged: notifier.setMusic,
+              ),
+              SwitchListTile(
+                title: Text(t.soundEffects),
+                subtitle: Text(t.soundEffectsHint),
+                value: settings?.sound ?? true,
+                onChanged: notifier.setSound,
+              ),
+              SwitchListTile(
+                title: Text(t.vibration),
+                subtitle: Text(t.vibrationHint),
+                value: settings?.vibration ?? true,
+                onChanged: notifier.setVibration,
+              ),
+              ListTile(title: Text(t.language), trailing: Text(t.vietnamese)),
+              ListTile(title: Text(t.controls), trailing: Text(t.joystick)),
+              ListTile(
+                title: Text(t.version),
+                trailing: Text(ref.watch(appVersionProvider).value ?? '—'),
+              ),
+            ],
           ),
-          const SizedBox(height: 14),
-          KeoButton(
-            title: 'Xong',
-            icon: Icons.check,
-            onPressed: () => Navigator.pop(context),
-          ),
-        ],
-      );
+        ),
+        SizedBox(height: 14.h),
+        KeoButton(
+          title: t.done,
+          icon: Icons.check,
+          onPressed: () => keoPop(context),
+        ),
+      ],
+    );
+  }
 }
